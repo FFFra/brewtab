@@ -1,16 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-// import {Grid, Jumbotron} from 'react-bootstrap';
+import ReactDOM from 'react-dom';
+import registerServiceWorker from './registerServiceWorker';
 
-
-class App extends Component {
-
-   constructor(props) {
-    super(props);
-  }
-
-
-    CUSTOMERS = [
+  var CUSTOMERS = [
 
     {
       name : "Frá",
@@ -23,20 +16,18 @@ class App extends Component {
       amount: 13.53,
     },  
     
-  ]  
+  ];  
 
 
-  render() {
+
+  function Application(props) {
     return (
-      
-      <div className="tab">
-        
-        <Header title={this.props.title}/>
 
+      <div className="tab">    
+        <Header title={props.title}/>
         <div className="total-container">
           <div className="total-text">Total</div>  
         </div>  
-
         <div className="customers">
           <Customer name="whatever" quantity={55} amount={12.51}/> 
           <Customer name="whatever" quantity={55} amount={12.51}/> 
@@ -45,9 +36,9 @@ class App extends Component {
     );
   }
 
-}
 
-App.propTypes = {
+
+Application.propTypes = {
   customers: PropTypes.arrayOf(PropTypes.shape({
     name: PropTypes.string.isRequired,
     quantity: PropTypes.number.isRequired,
@@ -90,13 +81,6 @@ function Customer(props){
   );
 }
 
-Customer.propTypes = {
-  customers: PropTypes.arrayOf(PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    quantity: PropTypes.number.isRequired,
-    amount: PropTypes.number.isRequired,
-  })).isRequired,
-};
 
 
 function Quantity(props){
@@ -125,6 +109,7 @@ Amount.propTypes={
 }
 
 
-
+ReactDOM.render(<Application customers={CUSTOMERS}/>, document.getElementById('root'));
+registerServiceWorker();
  
-export default App;
+export default Application;
