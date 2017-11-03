@@ -1,7 +1,9 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
 import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 import registerServiceWorker from './registerServiceWorker';
+
+var createReactClass = require('create-react-class');
 
   var CUSTOMERS = [
 
@@ -26,37 +28,47 @@ import registerServiceWorker from './registerServiceWorker';
     
   ];  
 
+var Application = createReactClass({
 
+  propTypes:{
+    title: PropTypes.string, 
+    initialCustomers: PropTypes.arrayOf(PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      quantity: PropTypes.number.isRequired,
+      amount: PropTypes.number.isRequired,
+      id: PropTypes.number.isRequired
+    })).isRequired,
+  },
 
-  function Application(props) {
+  getDefaultProps: function () {
+    return {
+      title: "Viella's Brew Tab" 
+    };
+  },
+
+  getInitialState: function () {
+    return {
+      customers: this.props.initialCustomers,
+    };
+  },
+
+  render: function () {
     return (
-
       <div className="tab">    
-        <Header title={props.title}/>
+        <Header title={this.props.title}/>
         <div className="total-container">
           <div className="total-text">Total</div>  
         </div>  
         <div className="customers">
-          {props.customers.map(function(customer) {
+          {this.state.customers.map(function(customer) {
           return <Customer name={customer.name} quantity={customer.quantity} amount={customer.amount} key={customer.id} />
           })}
-
         </div>   
       </div> 
     );
-  }
+  },
+});
 
-
-
-Application.propTypes = {
-  customers: PropTypes.arrayOf(PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    quantity: PropTypes.number.isRequired,
-    amount: PropTypes.number.isRequired,
-    id: PropTypes.number.isRequired
-  })).isRequired,
-  
-}
 
 
 function Header (props) {
@@ -66,14 +78,6 @@ function Header (props) {
     </div>
   );
 }
-
-Header.propTypes = {
-  title: PropTypes.string,   
-};
-
-Header.defaultProps = {
-  title: "Viella's Brew Tab"
-};
 
 
 function Customer(props){
@@ -93,19 +97,18 @@ function Customer(props){
 }
 
 
-
-function Quantity(props){
+function Quantity (props) {
   return(
-    <div className="counter">
-      <button className="counter-action decrement">-</button>
-        <div className="counter-score"> {props.quantity} </div>
-      <button className="counter-action increment">+</button>
-    </div>
+      <div className="counter">
+        <button className="counter-action decrement">-</button>
+          <div className="counter-score"> {props.quantity} </div>
+        <button className="counter-action increment">+</button>
+      </div>
   );
 }
 
 Quantity.propTypes = {
-  quantity: PropTypes.number.isRequired,
+  quantity: PropTypes.number.isRequired
 }
 
 
@@ -120,7 +123,7 @@ Amount.propTypes={
 }
 
 
-ReactDOM.render(<Application customers={CUSTOMERS}/>, document.getElementById('root'));
+ReactDOM.render(<Application initialCustomers={CUSTOMERS}/>, document.getElementById('root'));
 registerServiceWorker();
  
 export default Application;
