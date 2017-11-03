@@ -6,14 +6,22 @@ import registerServiceWorker from './registerServiceWorker';
   var CUSTOMERS = [
 
     {
-      name : "Frá",
-      quantity: 15,
-      amount: 13.53,
+      name : "Rodrigo",
+      quantity: 7,
+      amount: 12.33,
+      id: 1,
+    },
+    {
+      name : "Zé Branco",
+      quantity: 16,
+      amount: 23.13,
+      id: 2,
     },
     {
       name : "Frá",
-      quantity: 15,
-      amount: 13.53,
+      quantity: 21,
+      amount: 43.83,
+      id: 3,
     },  
     
   ];  
@@ -29,8 +37,10 @@ import registerServiceWorker from './registerServiceWorker';
           <div className="total-text">Total</div>  
         </div>  
         <div className="customers">
-          <Customer name="whatever" quantity={55} amount={12.51}/> 
-          <Customer name="whatever" quantity={55} amount={12.51}/> 
+          {props.customers.map(function(customer) {
+          return <Customer name={customer.name} quantity={customer.quantity} amount={customer.amount} key={customer.id} />
+          })}
+
         </div>   
       </div> 
     );
@@ -43,6 +53,7 @@ Application.propTypes = {
     name: PropTypes.string.isRequired,
     quantity: PropTypes.number.isRequired,
     amount: PropTypes.number.isRequired,
+    id: PropTypes.number.isRequired
   })).isRequired,
   
 }
