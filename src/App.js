@@ -58,6 +58,12 @@ var Application = createReactClass({
     this.setState(this.state);
   },
 
+  onAmountChange: function(index, delta) {
+    console.log('onAmountChange', index, delta);
+    // this.state.customers[index].amount += delta;
+    // this.setState(this.state);
+  },
+
   render: function () {
     return (
       <div className="tab">    
@@ -70,6 +76,7 @@ var Application = createReactClass({
           return ( 
           <Customer
           onQuantityChange = {function(delta) {this.onQuantityChange (index, delta)}.bind(this)} 
+          onAmountChange = {function(delta) {this.onAmountChange (index, delta)}.bind(this)}
           name={customer.name} 
           quantity={customer.quantity} 
           amount={customer.amount} 
@@ -104,7 +111,7 @@ function Customer(props){
       <Quantity quantity={props.quantity} onChange={props.onQuantityChange}/>            
     </div>
     <div className="amount-field">
-      <Amount amount={props.amount}/>
+      <Amount amount={props.amount} amountChange={props.onAmountChange}/>
     </div>
   </div>  
   );
@@ -114,15 +121,16 @@ Customer.propTypes = {
   name: PropTypes.string.isRequired,
   quantity: PropTypes.number.isRequired,
   onQuantityChange: PropTypes.func.isRequired,
+  onAmountChange: PropTypes.func.isRequired,
 }
 
 
 function Quantity (props) {
   return(
       <div className="counter">
-        <button className="counter-action decrement" onClick={function(){props.onChange(-1);}}>-</button>
+        <button className="counter-action decrement" onClick={function(){props.onChange(-1); {props.amountChange(-10)}}}>-</button>
           <div className="counter-score"> {props.quantity} </div>
-        <button className="counter-action increment" onClick={function(){props.onChange(+1);}}>+</button>
+        <button className="counter-action increment" onClick={function(){props.onChange(+1); {props.amountChange(+10)}}}>+</button>
       </div>
   );
 }
@@ -141,6 +149,7 @@ function Amount(props){
 
 Amount.propTypes={
     amount: PropTypes.number.isRequired,
+    amountChange: PropTypes.func.isRequired,
 }
 
 
