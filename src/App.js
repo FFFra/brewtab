@@ -59,7 +59,10 @@ var Application = createReactClass({
   },
 
   onAmountChange: function(index, delta) {
-    console.log('onAmountChange', index, delta);
+		const customers = this.state.customers
+		customers[index].amount += delta
+		this.setState({ customers })
+    // console.log('onAmountChange', index, delta);
     // this.state.customers[index].amount += delta;
     // this.setState(this.state);
   },
