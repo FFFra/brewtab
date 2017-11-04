@@ -52,6 +52,12 @@ var Application = createReactClass({
     };
   },
 
+  onQuantityChange: function (index, delta) {
+    console.log('onQuantityChange', index, delta);
+    this.state.customers[index].quantity += delta;
+    this.setState(this.state);
+  },
+
   render: function () {
     return (
       <div className="tab">    
@@ -60,9 +66,17 @@ var Application = createReactClass({
           <div className="total-text">Total</div>  
         </div>  
         <div className="customers">
-          {this.state.customers.map(function(customer) {
-          return <Customer name={customer.name} quantity={customer.quantity} amount={customer.amount} key={customer.id} />
-          })}
+          {this.state.customers.map(function(customer, index) {
+          return ( 
+          <Customer
+          onQuantityChange = {function(delta) {this.onQuantityChange (index, delta)}.bind(this)} 
+          name={customer.name} 
+          quantity={customer.quantity} 
+          amount={customer.amount} 
+          key={customer.id}
+          />
+          );
+          }.bind(this))}
         </div>   
       </div> 
     );
@@ -87,7 +101,7 @@ function Customer(props){
      {props.name}
     </div>
     <div className="customer-score">
-      <Quantity quantity={props.quantity}/>            
+      <Quantity quantity={props.quantity} onChange={props.onQuantityChange}/>            
     </div>
     <div className="amount-field">
       <Amount amount={props.amount}/>
@@ -96,19 +110,26 @@ function Customer(props){
   );
 }
 
+Customer.propTypes = {
+  name: PropTypes.string.isRequired,
+  quantity: PropTypes.number.isRequired,
+  onQuantityChange: PropTypes.func.isRequired,
+}
+
 
 function Quantity (props) {
   return(
       <div className="counter">
-        <button className="counter-action decrement">-</button>
+        <button className="counter-action decrement" onClick={function(){props.onChange(-1);}}>-</button>
           <div className="counter-score"> {props.quantity} </div>
-        <button className="counter-action increment">+</button>
+        <button className="counter-action increment" onClick={function(){props.onChange(+1);}}>+</button>
       </div>
   );
 }
 
 Quantity.propTypes = {
-  quantity: PropTypes.number.isRequired
+  quantity: PropTypes.number.isRequired,
+  onChange: PropTypes.func.isRequired,
 }
 
 
